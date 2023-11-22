@@ -1,11 +1,3 @@
-pub fn mog() {}
+mod layer;
 
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn mog_runs() {
-        mog()
-    }
-}
+pub use layer::Layer;
