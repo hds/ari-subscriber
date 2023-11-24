@@ -1,14 +1,66 @@
+//! A [`tracing-subscriber`] Layer which outputs to `stdout`.
+//!
+//! See the documentation on [`Layer`] for more details.
 use chrono::{DateTime, Utc};
 use tracing::{span, subscriber::Interest, Subscriber};
 use tracing_subscriber::registry::LookupSpan;
 
 use crate::fmt::{FmtFields, FmtSpan};
 
+/// Creates a new [`Layer`].
+///
+/// See the [`Layer`] documentation for details on customization.
+///
+/// # Examples
+///
+/// ```rust
+/// use tracing_subscriber::prelude::*;
+///
+/// let layer = aeiou::layer();
+/// tracing_subscriber::registry().with(layer).init();
+///
+/// // Will be printed by `aeiou`
+/// tracing::info!("nice!");
+/// ```
+#[must_use = "A Layer does nothing if it is not added to a registry."]
+pub fn layer() -> Layer {
+    Layer {}
+}
+
+/// A [`tracing-subscriber`] Layer which outputs to `stdout`.
+///
+/// The layer can be added to a [`tracing_subscriber`] registry and will output trace information
+/// to `stdout`.
 pub struct Layer {}
 
 impl Layer {
+    /// Creates a new [`Layer`].
+    ///
+    /// Currently, no customization is possible.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use tracing_subscriber::prelude::*;
+    ///
+    /// use aeiou::Layer;
+    ///
+    /// let layer = Layer::new();
+    /// tracing_subscriber::registry().with(layer).init();
+    ///
+    /// // Will be printed by `aeiou`
+    /// tracing::info!("wonderful!");
+    /// ```
+    #[must_use = "A Layer does nothing if it is not added to a registry."]
     pub fn new() -> Self {
         Self {}
+    }
+}
+
+impl Default for Layer {
+    #[must_use = "A Layer does nothing if it is not added to a registry."]
+    fn default() -> Self {
+        Self::new()
     }
 }
 

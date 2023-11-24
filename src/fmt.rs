@@ -30,7 +30,7 @@ impl FmtSpan {
             name = &self.name,
             id = self.id.into_u64(),
             fields = self.fields.formatted(),
-        )
+        );
     }
 
     pub(crate) fn formatted(&self) -> &str {
