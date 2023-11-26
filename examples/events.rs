@@ -7,7 +7,9 @@ fn main() {
 
     tracing_subscriber::registry().with(layer).init();
 
-    tracing::info!("a message");
+    tracing::trace!("This is way too verbose");
     tracing::debug!(field = "value", "my message");
+    tracing::info!("a message");
+    tracing::warn!("warn me!");
     tracing::error!(field = "only one");
 }

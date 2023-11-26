@@ -1,7 +1,9 @@
-//! A [`tracing-subscriber`] optimized for visually debugging Tokio tracing instrumentation.
+//! The *Async Executor Instrumentation Observability Utility* is a [`tracing-subscriber`]
+//! optimized for visually debugging Tokio tracing instrumentation.
 //!
-//! This crate provides a [`Layer`] which writes [`tracing`] information to `stdout`. It marks the
-//! traces that result from the tracing instrumentation in Tokio to make identifying them easier.
+//! This crate provides a [`Layer`] which writes [`tracing`] information to `stdout`. It colorizes
+//! the traces that result from the tracing instrumentation in Tokio to make identifying them
+//! easier.
 //!
 //! [`tracing-subscriber`]: tracing_subscriber
 //!

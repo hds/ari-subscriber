@@ -5,7 +5,7 @@ use chrono::{DateTime, Utc};
 use tracing::{span, subscriber::Interest, Subscriber};
 use tracing_subscriber::registry::LookupSpan;
 
-use crate::fmt::{FmtFields, FmtSpan};
+use crate::fmt::{FmtEvent, FmtFields, FmtSpan};
 
 /// Creates a new [`Layer`].
 ///
@@ -100,11 +100,9 @@ where
 
     fn on_event(&self, event: &tracing::Event<'_>, ctx: tracing_subscriber::layer::Context<'_, S>) {
         let now: DateTime<Utc> = Utc::now();
+
         let mut fields = FmtFields::new_event();
         event.record(&mut fields);
-
-        let meta = event.metadata();
-        let level = meta.level().as_str();
 
         let mut formatted_scope = String::new();
         if let Some(scope) = ctx.event_scope(event) {
@@ -116,12 +114,9 @@ where
                 formatted_scope.push_str(&format!("{span} ", span = span.formatted()));
             }
         }
+        let mut fmt_event = FmtEvent::new(now, event.metadata(), &formatted_scope, fields);
 
-        let timestamp = now.format("%Y-%m-%dT%H:%M:%S%.6fZ");
-        println!(
-            "{timestamp} {level:>5} {formatted_scope}{formatted}",
-            formatted = fields.formatted_updated()
-        );
+        println!("{}", fmt_event.formatted());
     }
 
     fn on_enter(&self, _id: &span::Id, _ctx: tracing_subscriber::layer::Context<'_, S>) {}
