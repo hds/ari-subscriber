@@ -24,7 +24,7 @@ use crate::fmt::{FmtEvent, FmtFields, FmtSpan};
 /// ```
 #[must_use = "A Layer does nothing if it is not added to a registry."]
 pub fn layer() -> Layer {
-    Layer {}
+    Layer::new()
 }
 
 /// A [`tracing-subscriber`] Layer which outputs to `stdout`.

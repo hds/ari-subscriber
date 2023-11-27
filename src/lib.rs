@@ -5,8 +5,6 @@
 //! the traces that result from the tracing instrumentation in Tokio to make identifying them
 //! easier.
 //!
-//! [`tracing-subscriber`]: tracing_subscriber
-//!
 //! # Usage
 //!
 //! This example will set up a formatting [`tracing_subscriber::Layer`] which is then added to the
@@ -29,6 +27,42 @@
 //! }
 //! ````
 //!
+//! A common use case is to use `aeiou` together with the [`console-subscriber`], which aggregates
+//! the same Tokio tracing instrumentation to be visualized in Tokio Console.
+//!
+//! ```rust
+//! use tracing_subscriber::prelude::*;
+//!
+//! #[tokio::main]
+//! async fn main() {
+//!     let fmt_layer = aeiou::layer();
+//!     let console_layer = console_subscriber::spawn();
+//!
+//!     tracing_subscriber::registry()
+//!         .with(fmt_layer)
+//!         .with(console_layer)
+//!         .init();
+//!
+//!     tokio::spawn(async {
+//!         tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+//!     })
+//!     .await
+//!     .unwrap();
+//! }
+//! ````
+//! 
+//! ## Comparison with `tracing-subscriber`
+//! 
+//! `aeiou` is built on top of `tracing-subscriber` and uses its registry (as do the majority of
+//! `tracing` subscribers). It offers an alternative to the [`fmt::Subscriber`] and underlying
+//! [`fmt::Layer`] in that crate.
+//! 
+//! If you are in doubt about which format subscriber to use, pick the one from
+//! `tracing-subscriber`. It is more flexible and without a doubt, much more performant.
+//! 
+//! You would only use the `aeiou` format [`Layer`] if you have a specific need to visualize the
+//! tracing instrumentation built into Tokio.
+//!
 //! ## Supported Rust Versions
 //!
 //! `aeiou` is built against the latest stable release. The minimum supported version is 1.64. The
@@ -45,6 +79,11 @@
 //!
 //! Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion
 //! in `aeiou` by you, shall be licensed as MIT, without any additional terms or conditions.
+//!
+//! [`console-subscriber`]: https://docs.rs/console-subscriber/latest/console_subscriber/
+//! [`tracing-subscriber`]: tracing_subscriber
+//! [`fmt::Layer`]: struct@tracing_subscriber::fmt::Layer
+//! [`fmt::Subscriber`]: struct@tracing_subscriber::fmt::Subscriber
 #![deny(rustdoc::missing_crate_level_docs, missing_docs)]
 
 pub(crate) mod fmt;
