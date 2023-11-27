@@ -13,12 +13,25 @@ enum FmtFieldsKind {
     Event(Option<String>),
 }
 
+#[derive(Clone)]
 enum SpanKind {
     Unknown,
     Spawn,
     Resource,
     AsyncOp,
     AsyncOpPoll,
+}
+
+impl SpanKind {
+    fn get_colors(&self) -> (Color, Color) {
+        match self {
+            Self::Spawn => (GREEN, GREEN_BOLD),
+            Self::Resource => (RED, RED_BOLD),
+            Self::AsyncOp => (BLUE, BLUE_BOLD),
+            Self::AsyncOpPoll => (YELLOW, YELLOW_BOLD),
+            Self::Unknown => (Color::White, Color::White),
+        }
+    }
 }
 
 pub(crate) struct FmtSpan {
@@ -52,13 +65,8 @@ impl FmtSpan {
     }
 
     pub(crate) fn format(&mut self) {
-        let (color, bold) = match self.kind {
-            SpanKind::Spawn => (GREEN, GREEN_BOLD),
-            SpanKind::Resource => (RED, RED_BOLD),
-            SpanKind::AsyncOp => (BLUE, BLUE_BOLD),
-            SpanKind::AsyncOpPoll => (YELLOW, YELLOW_BOLD),
-            SpanKind::Unknown => (Color::White, Color::White),
-        };
+        let (color, bold) = self.kind.get_colors();
+
         self.formatted = format!(
             "{name}[{id}]{{{fields}}}",
             name = &self.name,
@@ -106,14 +114,24 @@ impl<'a> FmtEvent<'a> {
         }
     }
 
+    pub(crate) fn new_span_event(
+        timestamp: DateTime<Utc>,
+        span: &FmtSpan,
+        meta: &'a Metadata<'a>,
+        scope: &'a str,
+        message: String,
+    ) -> Self {
+        Self {
+            timestamp,
+            kind: EventKind::SpanEvent(span.kind.clone()),
+            meta,
+            scope,
+            fields: FmtFields::new_message(message),
+        }
+    }
+
     pub(crate) fn formatted(&mut self) -> String {
-        let (color, bold) = match self.kind {
-            EventKind::Waker => (PURPLE, PURPLE_BOLD),
-            EventKind::PollOp => (ORANGE, ORANGE_BOLD),
-            EventKind::ResourceStateUpdate => (PINK, PINK_BOLD),
-            EventKind::AsyncOpUpdate => (TURQUOISE, TURQUOISE_BOLD),
-            EventKind::Unknown => (Color::White, Color::White),
-        };
+        let (color, bold) = self.kind.get_colors();
 
         let timestamp_format = format!(
             "{date}T{time}.{subsec}",
@@ -126,14 +144,27 @@ impl<'a> FmtEvent<'a> {
             .format(&timestamp_format)
             .to_string()
             .dimmed();
-        format!(
-            // "{date}T{time}.{subsec}Z {level:>5} {scope}{target}: {formatted}",
-            "{timestamp} {level:>5} {scope}{target}: {formatted}",
-            level = format_level(*self.meta.level()),
-            scope = self.scope,
-            target = self.meta.target().color(bold).bold(),
-            formatted = self.fields.formatted_updated().color(color)
-        )
+        if matches!(&self.kind, EventKind::SpanEvent(_)) {
+            format!(
+                "{timestamp} {level:>5} {scope}{formatted}",
+                level = format_level(*self.meta.level()),
+                scope = self.scope,
+                formatted = self
+                    .fields
+                    .formatted_updated()
+                    .color(bold)
+                    .underline()
+                    .bold()
+            )
+        } else {
+            format!(
+                "{timestamp} {level:>5} {scope}{target}: {formatted}",
+                level = format_level(*self.meta.level()),
+                scope = self.scope,
+                target = self.meta.target().color(bold).bold(),
+                formatted = self.fields.formatted_updated().color(color)
+            )
+        }
     }
 }
 
@@ -148,12 +179,26 @@ fn format_level(level: tracing::Level) -> String {
     .to_string()
 }
 
-pub(crate) enum EventKind {
+enum EventKind {
     Unknown,
     Waker,
     PollOp,
     ResourceStateUpdate,
     AsyncOpUpdate,
+    SpanEvent(SpanKind),
+}
+
+impl EventKind {
+    fn get_colors(&self) -> (Color, Color) {
+        match self {
+            Self::Waker => (PURPLE, PURPLE_BOLD),
+            Self::PollOp => (ORANGE, ORANGE_BOLD),
+            Self::ResourceStateUpdate => (PINK, PINK_BOLD),
+            Self::AsyncOpUpdate => (TURQUOISE, TURQUOISE_BOLD),
+            Self::Unknown => (Color::White, Color::White),
+            Self::SpanEvent(span_kind) => span_kind.get_colors(),
+        }
+    }
 }
 
 pub(crate) struct FmtFields {
@@ -180,6 +225,17 @@ impl FmtFields {
             dirty: false,
             formatted: String::new(),
         }
+    }
+
+    pub(crate) fn new_message(message: String) -> Self {
+        let mut fields = Self {
+            kind: FmtFieldsKind::Event(Some(message)),
+            fields: Vec::new(),
+            dirty: true,
+            formatted: String::new(),
+        };
+        fields.format();
+        fields
     }
 
     pub(crate) fn formatted(&self) -> &str {
