@@ -3,7 +3,7 @@ name = "aeiou"
 version = "0.0.1"
 license = "MIT"
 edition = "2021"
-rust-version = "1.64.0"
+rust-version = "1.65.0"
 authors = ["Hayden Stainsby <hds@caffeineconcepts.com>"]
 readme = "README.md"
 homepage = "https://github.com/hds/aeiou"
@@ -16,7 +16,6 @@ format conducive to debugging.
 """
 categories = ["development-tools::debugging", "development-tools::profiling"]
 keywords = ["tracing", "tracing-subscriber", "tokio", "debugging", "async"]
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 chrono = "0.4"

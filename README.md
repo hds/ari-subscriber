@@ -67,7 +67,7 @@ tracing instrumentation built into Tokio.
 
 ## Supported Rust Versions
 
-`aeiou` is built against the latest stable release. The minimum supported version is 1.64. The
+`aeiou` is built against the latest stable release. The minimum supported version is 1.65. The
 current version of `aeiou` is not guaranteed to build on Rust versions earlier than the
 minimum supported version.
 
