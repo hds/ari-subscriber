@@ -1,6 +1,8 @@
 //! A [`tracing-subscriber`] Layer which outputs to `stdout`.
 //!
 //! See the documentation on [`Layer`] for more details.
+//!
+//! [`tracing-subscriber`]: tracing_subscriber
 use chrono::{DateTime, Utc};
 use tracing::{span, subscriber::Interest, Subscriber};
 use tracing_subscriber::registry::LookupSpan;
@@ -29,8 +31,12 @@ pub fn layer() -> Layer {
 
 /// A [`tracing-subscriber`] Layer which outputs to `stdout`.
 ///
-/// The layer can be added to a [`tracing_subscriber`] registry and will output trace information
+/// The layer can be added to a [`Registry`] and will output trace information
 /// to `stdout`.
+///
+/// [`tracing-subscriber`]: tracing_subscriber
+/// [`Registry`]: struct@tracing_subscriber::Registry
+
 pub struct Layer {}
 
 impl Layer {
