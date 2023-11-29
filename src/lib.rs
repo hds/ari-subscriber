@@ -1,5 +1,5 @@
-//! The *Async Executor Instrumentation Observability Utility* is a [`tracing-subscriber`]
-//! optimized for visually debugging Tokio tracing instrumentation.
+//! The *Async Runtime Instrumentation Subscriber* is a [`tracing-subscriber`] optimized for
+//! visually debugging Tokio tracing instrumentation.
 //!
 //! This crate provides a [`Layer`] which writes [`tracing`] information to `stdout`. It colorizes
 //! the traces that result from the tracing instrumentation in Tokio to make identifying them
@@ -15,7 +15,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let layer = aeiou::layer();
+//!     let layer = ari_subscriber::layer();
 //!
 //!     tracing_subscriber::registry().with(layer).init();
 //!
@@ -27,15 +27,15 @@
 //! }
 //! ````
 //!
-//! A common use case is to use `aeiou` together with the [`console-subscriber`], which aggregates
-//! the same Tokio tracing instrumentation to be visualized in Tokio Console.
+//! A common use case is to use `ari_subscriber` together with the [`console-subscriber`], which
+//! aggregates the same Tokio tracing instrumentation to be visualized in Tokio Console.
 //!
 //! ```rust
 //! use tracing_subscriber::prelude::*;
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let fmt_layer = aeiou::layer();
+//!     let fmt_layer = ari_subscriber::layer();
 //!     let console_layer = console_subscriber::spawn();
 //!
 //!     tracing_subscriber::registry()
@@ -69,32 +69,33 @@
 //!
 //! ## Comparison with `tracing-subscriber`
 //!
-//! `aeiou` is built on top of `tracing-subscriber` and uses its registry (as do the majority of
-//! `tracing` subscribers). It offers an alternative to the [`fmt::Subscriber`] and underlying
-//! [`fmt::Layer`] in that crate.
+//! `ari_subscriber` is built on top of `tracing-subscriber` and uses its registry (as do the
+//! majority of `tracing` subscribers). It offers an alternative to the [`fmt::Subscriber`] and
+//! underlying [`fmt::Layer`] in that crate.
 //!
 //! If you are in doubt about which format subscriber to use, pick the one from
 //! `tracing-subscriber`. It is more flexible and without a doubt, much more performant.
 //!
-//! You would only use the `aeiou` format [`Layer`] if you have a specific need to visualize the
-//! tracing instrumentation built into Tokio.
+//! You would only use the `ari_subscriber` format [`Layer`] if you have a specific need to
+//! visualize the tracing instrumentation built into Tokio.
 //!
 //! ## Supported Rust Versions
 //!
-//! `aeiou` is built against the latest stable release. The minimum supported version is 1.64. The
-//! current version of `aeiou` is not guaranteed to build on Rust versions earlier than the
-//! minimum supported version.
+//! `ari_subscriber` is built against the latest stable release. The minimum supported version is
+//! 1.64. The current version of `ari_subscriber` is not guaranteed to build on Rust versions
+//! earlier than the minimum supported version.
 //!
 //! ## License
 //!
 //! This project is licensed under the [MIT license].
 //!
-//! [MIT license]: https://github.com/hds/aeiou/blob/main/LICENSE
+//! [MIT license]: https://github.com/hds/ari_subscriber/blob/main/LICENSE
 //!
 //! ### Contribution
 //!
 //! Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion
-//! in `aeiou` by you, shall be licensed as MIT, without any additional terms or conditions.
+//! in `ari_subscriber` by you, shall be licensed as MIT, without any additional terms or
+//! conditions.
 //!
 //! [`console-subscriber`]: https://docs.rs/console-subscriber/latest/console_subscriber/
 //! [`tracing-subscriber`]: tracing_subscriber

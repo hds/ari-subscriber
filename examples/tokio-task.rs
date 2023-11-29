@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use tracing_subscriber::prelude::*;
 
-use aeiou::Layer;
+use ari_subscriber::Layer;
 
 #[tokio::main]
 async fn main() {

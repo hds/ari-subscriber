@@ -1,6 +1,6 @@
 use tracing_subscriber::prelude::*;
 
-use aeiou::Layer;
+use ari_subscriber::Layer;
 
 fn main() {
     let layer = Layer::new();

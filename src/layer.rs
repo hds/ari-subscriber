@@ -18,10 +18,10 @@ use crate::fmt::{FmtEvent, FmtFields, FmtSpan};
 /// ```rust
 /// use tracing_subscriber::prelude::*;
 ///
-/// let layer = aeiou::layer();
+/// let layer = ari_subscriber::layer();
 /// tracing_subscriber::registry().with(layer).init();
 ///
-/// // Will be printed by `aeiou`
+/// // Will be printed by `ari_subscriber`
 /// tracing::info!("nice!");
 /// ```
 #[must_use = "A Layer does nothing if it is not added to a registry."]
@@ -49,12 +49,12 @@ impl Layer {
     /// ```rust
     /// use tracing_subscriber::prelude::*;
     ///
-    /// use aeiou::Layer;
+    /// use ari_subscriber::Layer;
     ///
     /// let layer = Layer::new();
     /// tracing_subscriber::registry().with(layer).init();
     ///
-    /// // Will be printed by `aeiou`
+    /// // Will be printed by `ari_subscriber`
     /// tracing::info!("wonderful!");
     /// ```
     #[must_use = "A Layer does nothing if it is not added to a registry."]

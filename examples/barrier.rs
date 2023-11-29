@@ -3,7 +3,7 @@ use std::{sync::Arc, time::Duration};
 use tokio::sync::Barrier;
 use tracing_subscriber::prelude::*;
 
-use aeiou::Layer;
+use ari_subscriber::Layer;
 
 #[tokio::main]
 async fn main() {

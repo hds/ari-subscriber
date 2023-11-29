@@ -1,13 +1,13 @@
 [package]
-name = "aeiou"
+name = "ari-subscriber"
 version = "0.0.1"
 license = "MIT"
 edition = "2021"
 rust-version = "1.65.0"
 authors = ["Hayden Stainsby <hds@caffeineconcepts.com>"]
 readme = "README.md"
-homepage = "https://github.com/hds/aeiou"
-repository = "https://github.com/hds/aeiou"
+homepage = "https://github.com/hds/ari-subscriber"
+repository = "https://github.com/hds/ari-subscriber"
 description = """
 Async Executor Instrumentation Observability Utility
 
